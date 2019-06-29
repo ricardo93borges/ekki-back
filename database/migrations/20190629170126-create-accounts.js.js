@@ -2,35 +2,25 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('accounts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING(45),
-      },
-      email: {
-        type: Sequelize.STRING(45),
+      number: {
+        type: Sequelize.INTEGER(8),
         unique: true,
         allowNull: false,
       },
-      password: {
-        type: Sequelize.STRING(45),
+      balance: {
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
-      cpf: {
+      limit: {
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
-        unique: true,
-        type: Sequelize.STRING(11),
-      },
-      phone: {
-        allowNull: false,
-        unique: true,
-        type: Sequelize.STRING(11),
       },
       createdAt: {
         allowNull: false,
@@ -45,11 +35,11 @@ module.exports = {
     },
       {
         underscored: true,
-        tableName: 'users',
+        tableName: 'accounts'
       })
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('users')
+    return queryInterface.dropTable('accounts');
   }
 };

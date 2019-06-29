@@ -10,6 +10,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(45),
             allowNull: false,
         },
+        email: {
+            type: DataTypes.STRING(45),
+            allowNull: false,
+            unique: true
+        },
+        password: {
+            type: DataTypes.STRING(45),
+            allowNull: false,
+        },
         cpf: {
             type: DataTypes.STRING(11),
             allowNull: false,
@@ -20,6 +29,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
+        accountId: {
+            type: DataTypes.INTEGER,
+            field: 'account_id'
+        },
         createdAt: {
             type: DataTypes.DATE,
         },
@@ -27,8 +40,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
         },
     },
-    {
-        underscored: true,
-    })
+        {
+            underscored: true,
+        })
+
+    User.associate = models => {
+        User.belongsToMany(models.User, { as: 'user_id', through: 'contacts' })
+        User.belongsToMany(models.User, { as: 'contact_id', through: 'contacts' })
+    };
+
     return User
 }
