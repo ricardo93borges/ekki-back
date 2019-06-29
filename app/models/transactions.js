@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Transfer = sequelize.define('Transfer', {
+    const Transaction = sequelize.define('Transaction', {
         id: {
             allowNull: false,
             autoIncrement: true,
@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
             underscored: true,
         })
 
-    Transfer.associate = models => {
-        Transfer.belongsTo(models.Status, { as: 'status' })
-        Transfer.belongsTo(models.Account, { as: 'from_account' })
-        Transfer.belongsTo(models.Account, { as: 'to_account' })
+    Transaction.associate = models => {
+        Transaction.belongsTo(models.Status, { as: 'status' })
+        Transaction.belongsTo(models.Account, { as: 'from_account' })
+        Transaction.belongsTo(models.Account, { as: 'to_account' })
     }
 
-    return Transfer
+    return Transaction
 }

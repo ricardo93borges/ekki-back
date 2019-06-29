@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 
     Account.associate = models => {
         Account.hasOne(models.User, { as: 'account' })
-        Account.hasMany(models.Transfer, { as: 'from_account', foreignKey: 'from_account_id' })
-        Account.hasMany(models.Transfer, { as: 'to_account', foreignKey: 'to_account_id' })
+        Account.hasMany(models.Transaction, { as: 'from_account', foreignKey: 'from_account_id' })
+        Account.hasMany(models.Transaction, { as: 'to_account', foreignKey: 'to_account_id' })
     }
 
     return Account

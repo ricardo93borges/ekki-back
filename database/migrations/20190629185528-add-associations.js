@@ -11,7 +11,7 @@ module.exports = {
       onUpdate: 'CASCADE',
       onDelete: 'SET NULL',
     }).then(() => {
-      return queryInterface.addColumn('transfers', 'status_id', {
+      return queryInterface.addColumn('transactions', 'status_id', {
         type: Sequelize.INTEGER,
         references: {
           model: 'statuses',
@@ -21,7 +21,7 @@ module.exports = {
         onDelete: 'SET NULL',
       })
     }).then(() => {
-      return queryInterface.addColumn('transfers', 'from_account_id', {
+      return queryInterface.addColumn('transactions', 'from_account_id', {
         type: Sequelize.INTEGER,
         references: {
           model: 'accounts',
@@ -31,7 +31,7 @@ module.exports = {
         onDelete: 'SET NULL',
       })
     }).then(() => {
-      return queryInterface.addColumn('transfers', 'to_account_id', {
+      return queryInterface.addColumn('transactions', 'to_account_id', {
         type: Sequelize.INTEGER,
         references: {
           model: 'accounts',
@@ -46,8 +46,8 @@ module.exports = {
 
   down: (queryInterface) => {
     return queryInterface.removeColumn('users', 'account_id')
-      .then(() => queryInterface.removeColumn('transfers', 'status_id'))
-      .then(() => queryInterface.removeColumn('transfers', 'from_account_id'))
-      .then(() => queryInterface.removeColumn('transfers', 'to_account_id'))
+      .then(() => queryInterface.removeColumn('transactions', 'status_id'))
+      .then(() => queryInterface.removeColumn('transactions', 'from_account_id'))
+      .then(() => queryInterface.removeColumn('transactions', 'to_account_id'))
   }
 };
