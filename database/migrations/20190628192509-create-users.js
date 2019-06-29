@@ -34,13 +34,13 @@ module.exports = {
         field: 'updated_at'
       },
     },
-    {
-      underscored: true,
-      tableName: 'users',
-    })
+      {
+        underscored: true,
+        tableName: 'users',
+      })
   },
 
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('Users')
   }
 };
