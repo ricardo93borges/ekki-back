@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('status', {
+    return queryInterface.createTable('statuses', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,11 +17,11 @@ module.exports = {
     },
       {
         underscored: true,
-        tableName: 'status'
+        tableName: 'statuses'
       })
   },
 
   down: (queryInterface) => {
-    return queryInterface.dropTable('status');
+    return queryInterface.dropTable('statuses');
   }
 };

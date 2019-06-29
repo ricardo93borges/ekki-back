@@ -45,8 +45,9 @@ module.exports = (sequelize, DataTypes) => {
         })
 
     User.associate = models => {
-        User.belongsToMany(models.User, { as: 'user_id', through: 'contacts' })
-        User.belongsToMany(models.User, { as: 'contact_id', through: 'contacts' })
+        User.belongsToMany(models.User, { as: 'user', through: 'contacts' })
+        User.belongsToMany(models.User, { as: 'contact', through: 'contacts' })
+        User.belongsTo(models.Account, { as: 'account' })
     };
 
     return User

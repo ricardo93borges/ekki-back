@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface) => {
-    return queryInterface.bulkInsert('status', [
+    return queryInterface.bulkInsert('statuses', [
       { name: 'pendent' },
       { name: 'canceled' },
       { name: 'success' },
@@ -11,6 +11,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.bulkDelete('status', null, {});
+    return queryInterface.bulkDelete('statuses', null, {});
   }
 };
