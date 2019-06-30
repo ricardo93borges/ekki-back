@@ -25,37 +25,38 @@ exports.get = async (req, res) => {
         res.status(500).send(err.errors);
     }
 }
-/**
- * TODO se existe uma transaction com o mesmo valor feita a menos de 2 minutos atras:
- *  cancelar transaction antiga
- *  criar uma nova no lugar
- */
+
 exports.create = async (req, res) => {
     try {
         const fromAccount = await Account.findByPk(req.body.fromAccountId)
         const toAccount = await Account.findByPk(req.body.toAccountId)
-        const status = await Status.findOne({ where: { name: 'success' } })
+        const successStatus = await Status.findOne({ where: { name: 'success' } })
         const amount = req.body.amount
+
+        //If there is a similar transaction two minutes ago
+        const similarTransaction = await Transaction.findSimilarTransaction(fromAccount.id, toAccount.id, amount)
+        if (similarTransaction) {
+            const canceledStatus = await Status.findOne({ where: { name: 'canceled' } })
+            const transaction = await Transaction.addSimilar(fromAccount, toAccount, amount, successStatus, canceledStatus, similarTransaction)
+            return res.status(201).send(transaction)
+        }
 
         //If account has sufficient balance
         if (Number(fromAccount.balance) >= amount) {
-            const transaction = await Transaction.add(fromAccount, toAccount, status, amount)
-            res.status(201).send(transaction)
+            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount)
+            return res.status(201).send(transaction)
         }
 
-        const cash = (Number(fromAccount.limit) + Number(fromAccount.balance))
-
-        //If account has sufficient funds
-        if (cash > amount) {
+        //If account has sufficient funds (balance + limit)
+        const funds = (Number(fromAccount.limit) + Number(fromAccount.balance))
+        if (funds > amount) {
             const limit = fromAccount.limit - (amount - fromAccount.balance)
-            const transaction = await Transaction.add(fromAccount, toAccount, status, amount, limit)
-            res.status(201).send(transaction)
+            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount, limit)
+            return res.status(201).send(transaction)
         } else {
-            res.status(500).send({ errors: [{ message: 'insufficient funds' }] })
+            return res.status(500).send({ errors: [{ message: 'insufficient funds' }] })
         }
 
-        const transaction = await Transaction.add(req.body.amount, req.body.fromAccountId, req.body.toAccountId)
-        res.status(201).send(transaction)
     } catch (err) {
         console.log(err)
         res.status(500).send(err.errors);
