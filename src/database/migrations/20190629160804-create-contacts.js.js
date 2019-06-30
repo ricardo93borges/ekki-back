@@ -41,8 +41,6 @@ module.exports = {
       },
     },
       {
-        underscored: true,
-        tableName: 'contacts',
         uniqueKeys: {
           contacts_unique: {
             fields: ['user_id', 'contact_id']

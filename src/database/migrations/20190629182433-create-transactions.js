@@ -23,11 +23,7 @@ module.exports = {
         type: Sequelize.DATE,
         field: 'updated_at'
       },
-    },
-      {
-        underscored: true,
-        tableName: 'transactions',
-      })
+    })
   },
 
   down: (queryInterface) => {

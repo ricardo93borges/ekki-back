@@ -14,17 +14,14 @@ module.exports = (sequelize, DataTypes) => {
         },
         statusId: {
             type: DataTypes.INTEGER,
-            field: 'status_id',
             allowNull: false
         },
         fromAccountId: {
             type: DataTypes.INTEGER,
-            field: 'from_account_id',
             allowNull: false
         },
         toAccountId: {
             type: DataTypes.INTEGER,
-            field: 'to_account_id',
             allowNull: false
         },
         createdAt: {
@@ -33,10 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         updatedAt: {
             type: DataTypes.DATE,
         },
-    },
-        {
-            underscored: true,
-        })
+    })
 
     Transaction.associate = models => {
         Transaction.belongsTo(models.Status, { as: 'status' })

@@ -25,15 +25,26 @@ module.exports = (sequelize, DataTypes) => {
         updatedAt: {
             type: DataTypes.DATE,
         },
-    },
-        {
-            underscored: true,
-        })
+    })
 
     Account.associate = models => {
         Account.hasOne(models.User, { as: 'account' })
         Account.hasMany(models.Transaction, { as: 'from_account', foreignKey: 'from_account_id' })
         Account.hasMany(models.Transaction, { as: 'to_account', foreignKey: 'to_account_id' })
+    }
+
+    Account.prototype.checkFunds = function (amount = 0) {
+        let funds = { balance: this.balance, limit: this.limit, balanceUsage: 0, limitUsage: 0 }
+
+        if (this.balance <= amount) {
+            funds.balanceUsage = this.balance
+            funds.limitUsage = amount - this.balance
+        } else {
+            funds.balanceUsage = amount
+            funds.limitUsage = 0
+        }
+
+        return funds
     }
 
     return Account

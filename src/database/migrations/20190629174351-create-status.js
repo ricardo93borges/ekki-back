@@ -14,11 +14,7 @@ module.exports = {
         unique: true,
         allowNull: false,
       }
-    },
-      {
-        underscored: true,
-        tableName: 'statuses'
-      })
+    })
   },
 
   down: (queryInterface) => {
