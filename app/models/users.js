@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         accountId: {
             type: DataTypes.INTEGER,
-            field: 'account_id'
+            field: 'account_id',
+            allowNull: false,
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -48,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         User.belongsToMany(models.User, { as: 'user', through: 'contacts' })
         User.belongsToMany(models.User, { as: 'contact', through: 'contacts' })
         User.belongsTo(models.Account, { as: 'account' })
-    };
+    }
 
     return User
 }

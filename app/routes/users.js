@@ -4,5 +4,6 @@ const controller = require('../controllers/users')
 
 router.get('/', controller.all)
 router.get('/:id', controller.get)
+router.post('/', controller.create)
 
 module.exports = router
