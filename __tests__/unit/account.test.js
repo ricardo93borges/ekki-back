@@ -7,14 +7,14 @@ describe('Account', () => {
         await truncate()
     })
 
-    it('check account funds', async () => {
+    it('should check account funds', async () => {
         const account = await factory.create("Account");
         const funds = account.checkFunds()
 
         expect(funds).toEqual({ balance: 1000, limit: 500, balanceUsage: 0, limitUsage: 0 })
     })
 
-    it('check account funds using only balance', async () => {
+    it('should check account funds after using only balance', async () => {
         const account = await factory.create("Account");
         const amount = 50
         const funds = account.checkFunds(amount)
@@ -22,7 +22,7 @@ describe('Account', () => {
         expect(funds).toEqual({ balance: 1000, limit: 500, balanceUsage: 50, limitUsage: 0 })
     })
 
-    it('check account funds using balance and limit', async () => {
+    it('should check account funds after using balance and limit', async () => {
         const account = await factory.create("Account");
         const amount = 1100
         const funds = account.checkFunds(amount)
