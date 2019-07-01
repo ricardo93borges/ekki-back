@@ -5,21 +5,8 @@ require("dotenv").config({
 
 const express = require('express')
 
-class AppController {
-    constructor() {
-        this.app = express()
+const app = express()
+app.use(express.json())
+require('./app/routes/index')(app)
 
-        this.middlewares()
-        this.routes()
-    }
-
-    middlewares() {
-        this.app.use(express.json())
-    }
-
-    routes() {
-        require('./app/routes/index')(this.app)
-    }
-}
-
-module.exports = new AppController().app
+module.exports = app
