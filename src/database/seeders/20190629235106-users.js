@@ -13,7 +13,9 @@ module.exports = {
         password: "abcd1234",
         cpf: Math.floor(10000000000 + Math.random() * 900000),
         phone: Math.floor(5111111111 + Math.random() * 900000),
-        account_id: i
+        account_id: i,
+        created_at: Date.now(),
+        updated_at: Date.now()
       })
 
     return queryInterface.bulkInsert('users', objects, {});
