@@ -8,8 +8,8 @@ module.exports = {
         number: Math.floor(10000000 + Math.random() * 900000),
         balance: 1000,
         limit: 500,
-        created_at: Date.now(),
-        updated_at: Date.now()
+        createdAt: Date.now(),
+        updatedAt: Date.now()
       })
 
     return queryInterface.bulkInsert('accounts', objects, {});
