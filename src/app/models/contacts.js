@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
+    Contact.associate = models => {
+        Contact.belongsTo(models.User, { as: 'user'})
+        Contact.belongsTo(models.User, { as: 'contact'})
+    }
+
 
     return Contact
 }
