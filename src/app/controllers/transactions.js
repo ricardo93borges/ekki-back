@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const { Transaction } = require('../models')
 const { Account } = require('../models')
 const { Status } = require('../models')
+const { User } = require('../models')
 
 exports.get = async (req, res) => {
     try {
@@ -16,6 +17,10 @@ exports.get = async (req, res) => {
 
         const transactions = await Transaction.findAll({
             where: { [Op.or]: [{ from_account_id: accountId }, { to_account_id: accountId }] },
+            include: [
+                { model: Status, as: 'status' },
+                { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
+            ],
             offset, limit
         })
 
@@ -30,20 +35,38 @@ exports.create = async (req, res) => {
     try {
         const fromAccount = await Account.findByPk(req.body.fromAccountId)
         const toAccount = await Account.findByPk(req.body.toAccountId)
-        const successStatus = await Status.findOne({ where: { name: 'success' } })
+        const successStatus = await Status.findOne({ where: { name: 'Concluída' } })
         const amount = req.body.amount
 
         //If there is a similar transaction two minutes ago
         const similarTransaction = await Transaction.findSimilarTransaction(fromAccount.id, toAccount.id, amount)
         if (similarTransaction) {
-            const canceledStatus = await Status.findOne({ where: { name: 'canceled' } })
-            const transaction = await Transaction.addSimilar(fromAccount, toAccount, amount, successStatus, canceledStatus, similarTransaction)
+            const canceledStatus = await Status.findOne({ where: { name: 'Cancelada' } })
+            const t = await Transaction.addSimilar(fromAccount, toAccount, amount, successStatus, canceledStatus, similarTransaction)
+
+            const transaction = await Transaction.findOne({
+                where: { id: t.id },
+                include: [
+                    { model: Status, as: 'status' },
+                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
+                ],
+            })
+
             return res.status(201).send(transaction)
         }
 
         //If account has sufficient balance
         if (Number(fromAccount.balance) >= amount) {
-            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount)
+            const t = await Transaction.add(fromAccount, toAccount, successStatus, amount)
+
+            const transaction = await Transaction.findOne({
+                where: { id: t.id },
+                include: [
+                    { model: Status, as: 'status' },
+                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
+                ],
+            })
+
             return res.status(201).send(transaction)
         }
 
@@ -51,7 +74,16 @@ exports.create = async (req, res) => {
         const funds = (Number(fromAccount.limit) + Number(fromAccount.balance))
         if (funds > amount) {
             const limit = fromAccount.limit - (amount - fromAccount.balance)
-            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount, limit)
+            const t = await Transaction.add(fromAccount, toAccount, successStatus, amount, limit)
+
+            const transaction = await Transaction.findOne({
+                where: { id: t.id },
+                include: [
+                    { model: Status, as: 'status' },
+                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
+                ],
+            })
+
             return res.status(201).send(transaction)
         } else {
             return res.status(500).send({ errors: [{ message: 'insufficient funds' }] })

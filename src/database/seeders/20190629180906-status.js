@@ -3,10 +3,8 @@
 module.exports = {
   up: (queryInterface) => {
     return queryInterface.bulkInsert('statuses', [
-      { name: 'pendent' },
-      { name: 'canceled' },
-      { name: 'success' },
-      { name: 'failed' },
+      { name: 'Concluída' },
+      { name: 'Cancelada' }
     ], {});
   },
 
