@@ -42,31 +42,13 @@ exports.create = async (req, res) => {
         const similarTransaction = await Transaction.findSimilarTransaction(fromAccount.id, toAccount.id, amount)
         if (similarTransaction) {
             const canceledStatus = await Status.findOne({ where: { name: 'Cancelada' } })
-            const t = await Transaction.addSimilar(fromAccount, toAccount, amount, successStatus, canceledStatus, similarTransaction)
-
-            const transaction = await Transaction.findOne({
-                where: { id: t.id },
-                include: [
-                    { model: Status, as: 'status' },
-                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
-                ],
-            })
-
+            const transaction = await Transaction.addSimilar(fromAccount, toAccount, amount, successStatus, canceledStatus, similarTransaction)
             return res.status(201).send(transaction)
         }
 
         //If account has sufficient balance
         if (Number(fromAccount.balance) >= amount) {
-            const t = await Transaction.add(fromAccount, toAccount, successStatus, amount)
-
-            const transaction = await Transaction.findOne({
-                where: { id: t.id },
-                include: [
-                    { model: Status, as: 'status' },
-                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
-                ],
-            })
-
+            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount)
             return res.status(201).send(transaction)
         }
 
@@ -74,16 +56,7 @@ exports.create = async (req, res) => {
         const funds = (Number(fromAccount.limit) + Number(fromAccount.balance))
         if (funds > amount) {
             const limit = fromAccount.limit - (amount - fromAccount.balance)
-            const t = await Transaction.add(fromAccount, toAccount, successStatus, amount, limit)
-
-            const transaction = await Transaction.findOne({
-                where: { id: t.id },
-                include: [
-                    { model: Status, as: 'status' },
-                    { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
-                ],
-            })
-
+            const transaction = await Transaction.add(fromAccount, toAccount, successStatus, amount, limit)
             return res.status(201).send(transaction)
         } else {
             return res.status(500).send({ errors: [{ message: 'insufficient funds' }] })
