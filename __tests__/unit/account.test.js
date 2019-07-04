@@ -27,6 +27,6 @@ describe('Account', () => {
         const amount = 1100
         const funds = account.checkFunds(amount)
 
-        expect(funds).toEqual({ balance: 1000, limit: 500, balanceUsage: 1000, limitUsage: 100 })
+        expect(funds).toEqual({ balance: 1000, limit: 500, balanceUsage: 1000, limitUsage: "100.00" })
     })
 })
