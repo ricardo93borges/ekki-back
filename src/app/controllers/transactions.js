@@ -36,7 +36,7 @@ exports.create = async (req, res) => {
     try {
         const fromAccount = await Account.findByPk(req.body.fromAccountId)
         const toAccount = await Account.findByPk(req.body.toAccountId)
-        const successStatus = await Status.findOne({ where: { name: 'Concluída' } })
+        const successStatus = await Status.findOne({ where: { name: 'Concluida' } })
         const amount = req.body.amount
 
         //If there is a similar transaction two minutes ago

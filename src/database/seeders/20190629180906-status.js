@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface) => {
     return queryInterface.bulkInsert('statuses', [
-      { name: 'Concluída' },
+      { name: 'Concluida' },
       { name: 'Cancelada' }
     ], {});
   },
