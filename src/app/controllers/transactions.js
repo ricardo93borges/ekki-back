@@ -15,12 +15,13 @@ exports.get = async (req, res) => {
             where: { [Op.or]: [{ from_account_id: accountId }, { to_account_id: accountId }] }
         })
 
-        const transactions = await Transaction.findAll({
+        const transactions = await Transaction.findAll({            
             where: { [Op.or]: [{ from_account_id: accountId }, { to_account_id: accountId }] },
             include: [
                 { model: Status, as: 'status' },
                 { model: Account, as: 'to_account', include: [{ model: User, as: 'account' }] },
             ],
+            order: [['createdAt', 'DESC']],
             offset, limit
         })
 
