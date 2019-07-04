@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
 
         if (this.balance <= amount) {
             funds.balanceUsage = this.balance
-            funds.limitUsage = amount - this.balance
+            funds.limitUsage = (Number(amount) - Number(this.balance)).toFixed(2)
         } else {
             funds.balanceUsage = amount
             funds.limitUsage = 0
